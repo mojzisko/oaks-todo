@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-interface RandomFactModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { RandomFactModalProps} from '../types'
 
 const RandomFactModal: React.FC<RandomFactModalProps> = ({ isOpen, onClose }) => {
   const [fact, setFact] = useState<string | null>(null);

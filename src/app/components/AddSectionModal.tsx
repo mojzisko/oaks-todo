@@ -1,28 +1,11 @@
 "use client"
 import React, { useState } from 'react';
 import { AddSectionModalProps} from '../types'
+import { handleRemoveTaskField, handleAddTask, handleTaskChange } from '../lib/utils';
 
 const AddSectionModal: React.FC<AddSectionModalProps> = ({ isOpen, onClose, onAddSection }) => {
   const [sectionName, setSectionName] = useState<string>('');
   const [tasks, setTasks] = useState<string[]>(['']);
-
-  const handleAddTask = () => {
-    setTasks(prev => [...prev, '']);
-  };
-
-  const handleRemoveTask = (index: number) => {
-    if (tasks.length > 1) {
-      const newTasks = [...tasks];
-      newTasks.splice(index, 1);
-      setTasks(newTasks);
-    }
-  };
-
-  const handleTaskChange = (index: number, value: string) => {
-    const newTasks = [...tasks];
-    newTasks[index] = value;
-    setTasks(newTasks);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +22,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ isOpen, onClose, onAd
   return (
     <div className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center ${isOpen ? '' : 'hidden'}`}>
       <form onSubmit={handleSubmit} className="bg-white text-black p-6 rounded-md shadow-lg w-96">
-        
+
         <div className="mb-4">
           <label htmlFor="sectionName" className="block text-sm font-medium text-gray-700">Section Name:</label>
           <input 
@@ -59,13 +42,13 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ isOpen, onClose, onAd
               type="text" 
               value={task} 
               placeholder="Type task name here..."
-              onChange={(e) => handleTaskChange(index, e.target.value)}
+              onChange={(e) => handleTaskChange(tasks, setTasks, index, e.target.value)}
               className="flex-grow py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black"
             />
            {tasks.length > 1 && (
               <button 
                 type="button" 
-                onClick={() => handleRemoveTask(index)} 
+                onClick={() => handleRemoveTaskField(tasks, setTasks, index)} 
                 className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded-md text-white"
               >
                 X
@@ -74,7 +57,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ isOpen, onClose, onAd
           </div>
         ))}
   
-        <button type="button" onClick={handleAddTask} className="mb-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md text-black">
+        <button type="button" onClick={() => handleAddTask(setTasks)} className="mb-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md text-black">
           Add Another Task
         </button>
   

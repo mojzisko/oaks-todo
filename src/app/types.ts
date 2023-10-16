@@ -36,3 +36,8 @@ export interface SectionProps {
   isLocked: boolean;
   onTaskComplete: (taskIndex: number) => void;
 }
+
+export interface RandomFactModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}

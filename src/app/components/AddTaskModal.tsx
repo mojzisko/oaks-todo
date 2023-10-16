@@ -1,26 +1,11 @@
 "use client"
 import React, { useState } from 'react';
 import { AddTaskModalProps} from '../types'
+import { handleRemoveTaskField, handleAddTask, handleTaskChange } from '../lib/utils';
 
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, onAddTask, sections }) => {
   const [selectedSection, setSelectedSection] = useState<string>('0');
   const [tasks, setTasks] = useState<string[]>(['']);
-
-  const handleTaskChange = (index: number, value: string) => {
-    const newTasks = [...tasks];
-    newTasks[index] = value;
-    setTasks(newTasks);
-  };
-
-  const handleAddTaskField = () => {
-    setTasks(prev => [...prev, '']);
-  };
-
-  const handleRemoveTaskField = (index: number) => {
-    const newTasks = [...tasks];
-    newTasks.splice(index, 1);
-    setTasks(newTasks);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,12 +48,12 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, onAddTask,
                 type="text"
                 id={`task${index}`}
                 value={task}
-                onChange={(e) => handleTaskChange(index, e.target.value)}
+                onChange={(e) => handleTaskChange(tasks, setTasks, index, e.target.value)}
                 placeholder={`Enter task ${index + 1} text...`}
                 className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black"
               />
               {tasks.length > 1 && (
-                <button type="button" onClick={() => handleRemoveTaskField(index)} className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded-md text-white">
+                <button type="button" onClick={() => handleRemoveTaskField(tasks, setTasks, index)} className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded-md text-white">
                   X
                 </button>
               )}
@@ -76,7 +61,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, onAddTask,
           </div>
         ))}
 
-        <button type="button" onClick={handleAddTaskField} className="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md text-black">
+        <button type="button" onClick={() => handleAddTask(setTasks)} className="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md text-black">
           Add Another Task
         </button>
 
